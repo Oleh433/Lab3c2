@@ -7,17 +7,11 @@ namespace Lab3_Task2
     {
         static void Main(string[] args)
         {
-            var filePaths = GetFilePaths("C:\\Users\\User\\source\\repos\\Lab3\\laba3_task2\\Files");
+            var filePaths = GetFilePaths("C:\\Users\\Lenovo T470p\\source\\repos\\Lab3c2\\prc2t2\\Images");
 
             foreach (var file in filePaths)
             {
-                try
-                {
-                    CreateMirrored(file);
-                }
-                catch (Exception)
-                {
-                }
+                CreateMirrored(file);
             }
         }
 
@@ -28,14 +22,29 @@ namespace Lab3_Task2
 
         static void CreateMirrored(string filePath)
         {
-            Bitmap originalBitmap = new Bitmap(filePath);
+            try
+            {
+                if (!filePath.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)
+                    && !filePath.EndsWith(".gif", StringComparison.OrdinalIgnoreCase)
+                    && !filePath.EndsWith(".png", StringComparison.OrdinalIgnoreCase)
+                    && !filePath.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new WrongTypeException();
+                }
 
-            originalBitmap.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                Bitmap originalBitmap = new Bitmap(filePath);
 
-            string mirroredFilePath = @$"{filePath}-mirrored.gif";
-            originalBitmap.Save(mirroredFilePath);
+                originalBitmap.RotateFlip(RotateFlipType.RotateNoneFlipX);
 
-            originalBitmap.Dispose();
+                string mirroredFilePath = @$"{filePath}-mirrored.gif";
+                originalBitmap.Save(mirroredFilePath);
+
+                originalBitmap.Dispose();
+            }
+            catch (Exception)
+            {
+                throw new UnableToOpenFileException();
+            }
         }
     }
 }
